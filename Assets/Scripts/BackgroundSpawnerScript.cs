@@ -63,10 +63,10 @@ public class BackgroundSpawnerScript : MonoBehaviour
             }
             timer = 0;
         }
-        var currentSpawnPosition = player.transform.position.y - spawnHeightOffset;
+        var newSpawnerPosition = player.transform.position.y - spawnHeightOffset;
         transform.position = new Vector3(
             transform.position.x,
-            currentSpawnPosition,
+            newSpawnerPosition,
             transform.position.z
         );
     }
