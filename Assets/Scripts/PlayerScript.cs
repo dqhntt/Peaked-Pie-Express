@@ -40,6 +40,7 @@ public class PlayerScript : MonoBehaviour
             // Maybe slow down?
         }
 
+        // Fences have their own colliders so these may not be needed.
         if (transform.position.x < leftEdge)
         {
             playerRigidbody.velocity = Vector2.right;
