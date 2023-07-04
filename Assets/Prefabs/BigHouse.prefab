@@ -144,7 +144,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.35, y: 0.5}
+  m_Size: {x: 0.345, y: 0.5}
   m_EdgeRadius: 0
 --- !u!114 &-762516762961467585
 MonoBehaviour:
@@ -158,8 +158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06011a5b802b37041a5a45a6be88f255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionEffect: {fileID: 5542365555963245515}
   deadZone: 30
+  collisionEffect: {fileID: 5542365555963245515}
 --- !u!82 &5542365555963245515
 AudioSource:
   m_ObjectHideFlags: 0
