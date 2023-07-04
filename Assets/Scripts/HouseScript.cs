@@ -2,18 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class HouseScript : MonoBehaviour
 {
     private LogicScript logic;
-    [SerializeField] private AudioSource collisionEffect;
+    private PlayerScript player;
 
-    [SerializeField] float deadZone = 30; // On the y-axis.
+    [SerializeField] float deadZone; // On the y-axis.
+    [SerializeField] AudioSource collisionEffect;
 
     // Awake is called when the script instance is being loaded.
     private void Awake()
     {
         logic = GameObject.FindAnyObjectByType<LogicScript>();
+        player = GameObject.FindAnyObjectByType<PlayerScript>();
     }
 
     // Start is called before the first frame update
@@ -25,7 +26,12 @@ public class HouseScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y > deadZone)
+        if (!logic.IsGameStarted || logic.IsGameOver)
+        {
+            return;
+        }
+        var currentDeadZone = player.getPosition().y + deadZone;
+        if (transform.position.y > currentDeadZone)
         {
             Destroy(gameObject);
         }

@@ -12,10 +12,10 @@ public class BackgroundSpawnerScript : MonoBehaviour
 
     [SerializeField] GameObject player;
     [SerializeField] RaycastHit2D spawnChecker;
-    [SerializeField] float spawnCheckRadius = 5f;
+    [SerializeField] float spawnCheckRadius;
     [SerializeField] Transform tilemap;
-    [SerializeField] int spawnHeightOffset = 30;
-    [SerializeField] float spawnRate = 2; // One spawn every 2 seconds
+    [SerializeField] int spawnHeightOffset;
+    [SerializeField] float spawnRate;
     private float timer = 0;
 
     // Getters

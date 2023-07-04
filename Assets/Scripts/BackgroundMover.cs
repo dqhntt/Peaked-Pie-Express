@@ -5,14 +5,16 @@ using UnityEngine;
 public class BackgroundMover : MonoBehaviour
 {
     private LogicScript logic;
+    private PlayerScript player;
 
-    [SerializeField] float moveSpeed = 5;
-    [SerializeField] float deadZone = 50f;
+    [SerializeField] float moveSpeed;
+    [SerializeField] float deadZone;
 
     // Start is called before the first frame update
     void Start()
     {
         logic = GameObject.FindAnyObjectByType<LogicScript>();
+        player = GameObject.FindAnyObjectByType<PlayerScript>();
     }
 
     // Update is called once per frame
@@ -25,7 +27,9 @@ public class BackgroundMover : MonoBehaviour
         // Without deltaTime, it's moving (moveSpeed) units per frame.
         // With deltaTime, -> units per second.
         transform.position = transform.position + (Vector3.up * moveSpeed) * Time.deltaTime;
-        if (transform.position.y > deadZone)
+
+        var currentDeadZone = player.getPosition().y + deadZone;
+        if (transform.position.y > currentDeadZone)
         {
             if (transform.tag != "DoNotDelete")
             {

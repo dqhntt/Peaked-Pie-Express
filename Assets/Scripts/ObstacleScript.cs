@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
 
 public class ObstacleScript : MonoBehaviour
@@ -8,10 +7,9 @@ public class ObstacleScript : MonoBehaviour
     private LogicScript logic;
     private PlayerScript player;
 
-    [SerializeField] float deadZone = 30; // On the y-axis.
-    [SerializeField] int timePenalty = 5;
-    [SerializeField] private AudioSource collisionEffect;
-
+    [SerializeField] float deadZone; // On the y-axis.
+    [SerializeField] int timePenalty;
+    [SerializeField] AudioSource collisionEffect;
 
     // Awake is called when the script instance is being loaded.
     private void Awake()
