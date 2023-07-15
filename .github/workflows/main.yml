@@ -1,0 +1,126 @@
+name: GameCI 😎
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main, '*']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # cancel-in-progress: true
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+jobs:
+  buildAndTestForLinuxBasedPlatforms:
+    name: Build and Test for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          # - iOS # Build an iOS player.
+          # - Android # Build an Android player.
+          # - WebGL # WebGL.
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}
+            Library-
+      - uses: game-ci/unity-test-runner@v2
+        id: testRunner
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Test results (all modes)
+          path: ${{ steps.testRunner.outputs.artifactsPath }}
+      - uses: game-ci/unity-builder@v2
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-myParameter myValue -myBoolean -ThirdParameter andItsValue'
+          # We use dirty build because we are replacing the default project settings file above
+          allowDirtyBuild: true
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build for ${{ matrix.targetPlatform }}
+          path: build
+
+  buildForWindowsBasedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          # - StandaloneWindows # Build a Windows 32-bit standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          # - tvOS # Build an AppleTV player.
+          # - WSAPlayer # Build a UWP App.
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}
+            Library-
+      - uses: game-ci/unity-builder@v2
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-myParameter myValue -myBoolean -ThirdParameter andItsValue'
+          # We use dirty build because we are replacing the default project settings file above
+          allowDirtyBuild: true
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build for ${{ matrix.targetPlatform }}
+          path: build
+
+  buildForMacOSBasedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneOSX # Build a macOS standalone.
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}
+            Library-
+      - uses: game-ci/unity-builder@v2
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-myParameter myValue -myBoolean -ThirdParameter andItsValue'
+          # We use dirty build because we are replacing the default project settings file above
+          allowDirtyBuild: true
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build for ${{ matrix.targetPlatform }}
+          path: build
