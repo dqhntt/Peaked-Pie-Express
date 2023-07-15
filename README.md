@@ -1,5 +1,7 @@
 # Peaked Pie Delivery Guy
 
+![GameCI workflow](https://github.com/dqhntt/Peaked-Pie-Express/actions/workflows/main.yml/badge.svg)
+
 **Submission for [Mountain Top Game Jam 2023](https://pnajjarr.itch.io/peaked-pie)**
 
 Ever had a [Peaked Pie](https://www.peakedpies.com/menu#av-layout-grid-1) from the restaurant near Burnaby Mountain? Help your Delivery Guy deliver his Peaked Pies on time! Control your player and make sure he doesn't bump into obstacles such as trees, ferocious bears and fences, which will decrease his time limit. The more houses you pass through to deliver pies, the more points you get!

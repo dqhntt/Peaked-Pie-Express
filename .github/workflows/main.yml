@@ -1,0 +1,136 @@
+name: GameCI 😎
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main, '*']
+
+jobs:
+  buildAndTestForLinuxBasedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          # - iOS # Build an iOS player.
+          # - Android # Build an Android player.
+          # - WebGL # WebGL.
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}
+            Library-
+      - uses: game-ci/unity-test-runner@v2
+        id: testRunner
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Test results (all modes)
+          path: ${{ steps.testRunner.outputs.artifactsPath }}
+      - run: git reset --hard
+      - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-myParameter myValue -myBoolean -ThirdParameter andItsValue'
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build
+          path: build
+
+  buildForWindowsBasedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          # - StandaloneWindows # Build a Windows 32-bit standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          # - tvOS # Build an AppleTV player.
+          - WSAPlayer # Build a UWP App.
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}
+            Library-
+      - run: git reset --hard
+      - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-myParameter myValue -myBoolean -ThirdParameter andItsValue'
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build
+          path: build
+
+  buildForMacOSBasedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneOSX # Build a macOS standalone.
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}
+            Library-
+
+      - run: git reset --hard
+
+      - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-myParameter myValue -myBoolean -ThirdParameter andItsValue'
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build
+          path: build
