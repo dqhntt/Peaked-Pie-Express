@@ -42,7 +42,7 @@ jobs:
           restore-keys: |
             Library-${{ matrix.targetPlatform }}
             Library-
-      - uses: game-ci/unity-test-runner@v2
+      - uses: game-ci/unity-test-runner@v3
         id: testRunner
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
