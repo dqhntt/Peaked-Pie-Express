@@ -1,6 +1,6 @@
 # Peaked Pie Delivery Guy
 
-![GameCI workflow](https://github.com/dqhntt/Peaked-Pie-Express/actions/workflows/main.yml/badge.svg)
+[![GameCI workflow](https://github.com/dqhntt/Peaked-Pie-Express/actions/workflows/main.yml/badge.svg)](https://github.com/dqhntt/Peaked-Pie-Express/actions/workflows/main.yml)
 
 **Submission for [Mountain Top Game Jam 2023](https://pnajjarr.itch.io/peaked-pie)**
 
