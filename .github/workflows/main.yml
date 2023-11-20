@@ -51,7 +51,7 @@ jobs:
         with:
           name: Test results (all modes)
           path: ${{ steps.testRunner.outputs.artifactsPath }}
-      - uses: game-ci/unity-builder@v2
+      - uses: game-ci/unity-builder@v4
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           # We use dirty build because we are replacing the default project settings file above
@@ -91,7 +91,7 @@ jobs:
             Library-
       - uses: jlumbroso/free-disk-space@main
         if: matrix.targetPlatform == 'Android'
-      - uses: game-ci/unity-builder@v2
+      - uses: game-ci/unity-builder@v4
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           # We use dirty build because we are replacing the default project settings file above
