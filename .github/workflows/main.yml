@@ -17,8 +17,8 @@ env:
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
 jobs:
-  buildAndTestForLinuxBasedPlatforms:
-    name: Build and Test for ${{ matrix.targetPlatform }}
+  testOnAllSupportedPlatforms:
+    name: Run tests on ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -27,7 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
-          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          - StandaloneLinux64
     steps:
       - run: |
           sudo apt update
@@ -51,17 +51,8 @@ jobs:
         with:
           name: Test results (all modes)
           path: ${{ steps.testRunner.outputs.artifactsPath }}
-      - uses: game-ci/unity-builder@v4
-        with:
-          targetPlatform: ${{ matrix.targetPlatform }}
-          # We use dirty build because we are replacing the default project settings file above
-          allowDirtyBuild: true
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
 
-  buildForAllSupportedPlatforms: # Except Linux above
+  buildForAllSupportedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
@@ -71,7 +62,7 @@ jobs:
           - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           # - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
-          # - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
           # - iOS # Build an iOS player.
           # - Android # Build an Android .apk standalone app.
           - WebGL # WebGL.
