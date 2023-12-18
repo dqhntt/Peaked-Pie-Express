@@ -46,7 +46,7 @@ jobs:
         id: testRunner
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Test results (all modes)
@@ -87,7 +87,7 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
           # We use dirty build because we are replacing the default project settings file above
           allowDirtyBuild: true
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
